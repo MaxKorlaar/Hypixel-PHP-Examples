@@ -16,7 +16,11 @@
 
     $options = [
         'api_key'    => 'your-api-key', // Replace this with your API-key. This is the only value you /need/ to change.
-        'cache_time' => 600, // In seconds. 600 is recommended.
+        'cache_times' => [ // These are the times for how long stuff will be kept in cache before requesting new stuff.
+            // The longer, the faster things will load, but information won't be up-to-date in the meantime.
+            'overall' => 900, // It's in seconds, so 900 seconds = 15 minutes
+            'uuid' => 864000, // For UUID related information. This rarely changes, so a long cachetime is OK.
+        ],
         'timeout'    => 1.5, // Also in seconds. Higher = More stable. Lower = faster if the api's down.
         'logging'    => false, // If you want to log debug messages, enable this.
         'debug'      => false, // Will display debug info in the form of HTML comments in your page's source if true.
