@@ -1,7 +1,9 @@
 <?php
 /**
- * Simple example on using the HypixelPHP API.
+ * Image example on using the HypixelPHP API.
  * Almost fully documented. Please refer to the PHP docs if you have any questions regarding php.
+ * This is quite the same as the simple example, but instead of showing it in a HTML formatted page, it's displayed
+ * inside of an png image.
  *
  * @author    Max Korlaar
  * @author    Plancke (for the Hypixel-PHP project)
@@ -34,14 +36,17 @@ $hypixel = new HypixelPHP($options); // Initialize HypixelPHP
  * if you don't know, use ['unknown' => 'uuid or username here']
  */
 
-$player = $hypixel->getPlayer(['unknown' => 'MegaMaxsterful']); // Fetches a new Player, with the name MegaMaxsterful. (object).
+$player = $hypixel->getPlayer(['unknown' => 'MaxKorlaar']); // Fetches a new Player, with the name MegaMaxsterful. (object).
 
 if ($player === null || $player->getStats() === null) {
     // Oops! Why is there no information about this player? Is the API down?
     // This may also trigger if the player does exist, but it doesn't have main statistics for some reason.
     $errorInfo = $hypixel->getUrlError();
     // Use var_dump($errorInfo); to see what $errorInfo returns. It may return null, meaning that the player probably doesn't exist.
-    $error = true; // We can use this later, so we display a different page layout.
+
+    // For now, display an error on the image that we generate:
+    $error = true;
+
 } else {
     $error = false;
     $username = $player->getName(); // There are way more things to get from a player. Again, check HypixelPHP.php.
@@ -56,34 +61,28 @@ if ($player === null || $player->getStats() === null) {
     // TIP! Don't know what statistics are available? Use var_dump($quakeStats->getRecord()); !
 }
 
+// Get the image
+
+$font = "../../resources/SourceSansPro-Light.otf";
+$im = imagecreatetruecolor(250, 80); // Width, height in px
+$trans_color = imagecolorallocatealpha($im, 250, 250, 240, 10); // The first R,G,B values do not actually matter, since the color will be transparent (127 = transparent)
+imagefill($im, 0, 0, $trans_color); // Make the background transparent
+imagesavealpha($im, true);
+$black = imagecolorallocate($im, 0, 0, 0); // Get a color for the text
+
+imagettftext($im, 25, 0, 0, 25, $black, $font, $username); // Put his username on the image at 0,25 (from top-left)
+// With size 25 and rotation 0
+imagettftext($im, 20, 0, 0, 50, $black, $font, $kills . ' Quakecraft kills!');
+
+imagettftext($im, 13, 0, 0, 75, $black, $font, 'I use PHP!');
+
+header('Content-type: image/png'); // Let the browser know it's an image. Headers must be sent before any output!
+// Comment/remove the above line if you are debugging the file (var_dumping stuff or getting errors) to make sure you browser knows to display text to you!
+imageinterlace($im);
+imagepng($im); // Outputs the image to the requester
+imagedestroy($im); // Destroys the image object, freeing up some memory
+
+// Congratulations, you have successfully created an image containing up-to-date statistics!
+// It took me quite long to figure out on how-to have transparent backgrounds though :P
+
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Simple sample on how-to use HypixelPHP</title>
-    <meta name="author" content="Max Korlaar">
-</head>
-<body>
-<h2>Totally unnecessary title</h2>
-
-<p>Note that this page is currently unstyled, and thus, looks like super poop. I r8 8/8 m8 legendary, they say...</p>
-
-<div class="page">
-    <?php
-    // Print the statistics to the page, or did something went wrong?
-    if ($error === false) {
-        // Nothing went wrong. Print the values we just retrieved.
-        echo '<h3>Statistics for ' . $displayName . '</h3>';
-        echo '<p><b>Quake Kills:</b> ' . $kills;
-        echo '<br/><b>Username:</b> ' . $username;
-        echo '<br/><b>Rank:</b> ' . $rank;
-        echo '</p>'; // Close the p-tag.
-    } else {
-        // Something went wrong :(
-        // Blame @Plancke?
-        echo '<h3>Oops... Something went wrong.</h3>';
-    }
-    ?>
-</div>
-</body>
-</html>
