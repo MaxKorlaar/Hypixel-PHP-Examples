@@ -65,7 +65,8 @@ if ($player === null || $player->getStats() === null) {
 
 $font = "../../resources/SourceSansPro-Light.otf";
 $im = imagecreatetruecolor(250, 80); // Width, height in px
-$trans_color = imagecolorallocatealpha($im, 250, 250, 240, 10); // The first R,G,B values do not actually matter, since the color will be transparent (127 = transparent)
+$trans_color = imagecolorallocatealpha($im, 250, 250, 250, 127); // The first R,G,B values do not actually matter, since the color will be transparent (127 = transparent)
+// PROTIP: Change it to 250, 250, 210, 10 to see how big your image is as it will fill up the complete image with a light yellow background.
 imagefill($im, 0, 0, $trans_color); // Make the background transparent
 imagesavealpha($im, true);
 $black = imagecolorallocate($im, 0, 0, 0); // Get a color for the text
