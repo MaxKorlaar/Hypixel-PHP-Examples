@@ -34,7 +34,8 @@ $hypixel = new HypixelPHP($options); // Initialize HypixelPHP
  * if you don't know, use ['unknown' => 'uuid or username here']
  */
 
-$player = $hypixel->getPlayer(['unknown' => 'MegaMaxsterful']); // Fetches a new Player, with the name MegaMaxsterful. (object).
+$player = $hypixel->getPlayer(['unknown' => 'MaxKorlaar']); // Fetches a new Player, with the name OR uuid MaxKorlaar.
+// When using 'unknown', the script guesses that by itself. (Player is an object or null).
 
 if ($player === null || $player->getStats() === null) {
     // Oops! Why is there no information about this player? Is the API down?
@@ -66,11 +67,12 @@ if ($player === null || $player->getStats() === null) {
 <body>
 <h2>Totally unnecessary title</h2>
 
-<p>Note that this page is currently unstyled, and thus, looks like super poop. I r8 8/8 m8 legendary, they say...</p>
+<p>Note that this page is currently unstyled, and thus, looks like super poop. There used to be a bad reference to
+Turbo Kart Racers here in this paragraph, but I've removed it.</p>
 
 <div class="page">
     <?php
-    // Print the statistics to the page, or did something went wrong?
+    // Print the statistics to the page, or has something went wrong?
     if ($error === false) {
         // Nothing went wrong. Print the values we just retrieved.
         echo '<h3>Statistics for ' . $displayName . '</h3>';
@@ -81,6 +83,9 @@ if ($player === null || $player->getStats() === null) {
     } else {
         // Something went wrong :(
         // Blame @Plancke?
+        // Remember, I said something about var_dump before!
+        // You should var_dump() the $errorInfo that we've defined earlier on. With should, I mean could;
+        // You don't always want your errors to be shown to the public, so hide the info after fixing it sounds reasonable.
         echo '<h3>Oops... Something went wrong.</h3>';
     }
     ?>
